@@ -1,77 +1,78 @@
-
 function hitung() {
   const nama = document.getElementById("namaPelanggan").value;
   const tanggal = document.getElementById("tanggal").value;
-  const beratKotor = parseFloat(document.getElementById("beratKotor").value);
+  const totalBerat = parseFloat(document.getElementById("totalBerat").value);
   const jumlahKotak = parseInt(document.getElementById("jumlahKotak").value);
-  const beratPerKotak = parseFloat(document.getElementById("beratPerKotak").value);
+  const beratKotak = parseFloat(document.getElementById("beratKotak").value);
   const hargaPerKg = parseFloat(document.getElementById("hargaPerKg").value);
 
-  const totalBeratKotak = jumlahKotak * beratPerKotak;
-  const beratBersih = beratKotor - totalBeratKotak;
+  const beratKotakTotal = jumlahKotak * beratKotak;
+  const beratBersih = totalBerat - beratKotakTotal;
   const totalHarga = beratBersih * hargaPerKg;
 
-  const outputDiv = document.getElementById("output");
-  outputDiv.innerHTML = `
+  const hasil = `
     <h3>Invoice</h3>
     <p><strong>Nama:</strong> ${nama}</p>
     <p><strong>Tanggal:</strong> ${tanggal}</p>
-    <p><strong>Berat Kotor:</strong> ${beratKotor.toFixed(2)} kg</p>
-    <p><strong>Total Kotak:</strong> ${jumlahKotak} x ${beratPerKotak}kg = ${totalBeratKotak}kg</p>
+    <p><strong>Berat Kotor:</strong> ${totalBerat.toFixed(2)} kg</p>
+    <p><strong>Jumlah Kotak:</strong> ${jumlahKotak} x ${beratKotak.toFixed(2)} kg = ${beratKotakTotal.toFixed(2)} kg</p>
     <p><strong>Berat Bersih:</strong> ${beratBersih.toFixed(2)} kg</p>
-    <p><strong>Harga per kg:</strong> Rp${hargaPerKg.toLocaleString()}</p>
-    <p><strong>Total Harga:</strong> Rp${totalHarga.toLocaleString()}</p>
+    <p><strong>Harga per kg:</strong> Rp ${hargaPerKg.toLocaleString("id-ID")}</p>
+    <h3>Total: Rp ${totalHarga.toLocaleString("id-ID")}</h3>
   `;
 
-  const transaksi = {
-    nama,
-    tanggal,
-    beratKotor,
-    jumlahKotak,
-    beratPerKotak,
-    hargaPerKg,
-    totalHarga,
-    beratBersih
+  document.getElementById("hasil").innerHTML = hasil;
+}
+
+function simpan() {
+  const riwayat = localStorage.getItem("riwayat") || "[]";
+  const data = {
+    nama: document.getElementById("namaPelanggan").value,
+    tanggal: document.getElementById("tanggal").value,
+    totalBerat: document.getElementById("totalBerat").value,
+    jumlahKotak: document.getElementById("jumlahKotak").value,
+    beratKotak: document.getElementById("beratKotak").value,
+    hargaPerKg: document.getElementById("hargaPerKg").value,
+    waktu: new Date().toISOString()
   };
-
-  simpanRiwayat(transaksi);
-  tampilkanRiwayat();
+  const dataRiwayat = JSON.parse(riwayat);
+  dataRiwayat.push(data);
+  localStorage.setItem("riwayat", JSON.stringify(dataRiwayat));
+  tampilRiwayat();
 }
 
-function simpanRiwayat(data) {
+function tampilRiwayat() {
   const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
-  riwayat.unshift(data);
-  localStorage.setItem("riwayat", JSON.stringify(riwayat));
-}
-
-function tampilkanRiwayat() {
-  const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
-  const list = document.getElementById("riwayatList");
-  list.innerHTML = "";
+  const el = document.getElementById("riwayat");
+  el.innerHTML = "";
   riwayat.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.tanggal} - ${item.nama} - ${item.beratBersih.toFixed(2)}kg - Rp${item.totalHarga.toLocaleString()}
-      <button onclick="hapusRiwayat(${index})" style="float:right;">Hapus</button>
+    el.innerHTML += `
+      <div style="border-bottom:1px solid #ccc; margin-bottom:10px;">
+        <strong>${item.tanggal} - ${item.nama}</strong><br/>
+        Berat Kotor: ${item.totalBerat}kg - Kotak: ${item.jumlahKotak} x ${item.beratKotak}kg<br/>
+        Harga: Rp ${item.hargaPerKg}<br/>
+        <button onclick="hapus(${index})">Hapus</button>
+      </div>
     `;
-    list.appendChild(li);
   });
 }
 
-function hapusRiwayat(index) {
+function hapus(index) {
   const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
   riwayat.splice(index, 1);
   localStorage.setItem("riwayat", JSON.stringify(riwayat));
-  tampilkanRiwayat();
+  tampilRiwayat();
 }
 
-function downloadJPG() {
-  html2canvas(document.querySelector(".output-area")).then(canvas => {
+function unduh() {
+  const hasil = document.getElementById("hasil");
+  html2canvas(hasil).then(canvas => {
     const link = document.createElement("a");
-    link.download = "invoice.jpg";
+    link.download = `invoice-${Date.now()}.jpg`;
     link.href = canvas.toDataURL("image/jpeg");
     link.click();
   });
 }
 
-window.onload = tampilkanRiwayat;
+// Tampilkan saat pertama kali
+tampilRiwayat();
