@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice Ayam</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    .invoice-box {
+      background: #fff; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+      max-width: 800px; margin: auto;
+    }
+    .header { display: flex; justify-content: space-between; align-items: center; }
+    .title { font-size: 20px; font-weight: bold; color: #003366; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    table, th, td { border: 1px solid #ddd; }
+    th, td { padding: 10px; text-align: left; }
+    th { background-color: #003366; color: white; }
+    .totals { margin-top: 20px; text-align: right; }
+    .footer { margin-top: 30px; font-size: 12px; text-align: center; color: #888; }
+    .download-btn {
+      margin-top: 20px; background-color: #003366; color: white; padding: 10px 20px; text-decoration: none;
+      display: inline-block; border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-box" id="invoiceBox">
+    <div class="header">
+      <div class="title">BORCELLE<br><small>Marketing Manager</small></div>
+      <div>INVOICE<br><small>Selasa, 23 Desember 2040</small></div>
+    </div>
+    <p>Kepada:<br>Juliana Silvia<br>hello@reallygreatsite.com<br>123 Anywhere St., Any City, ST 12345</p>
+    <table>
+      <tr><th>PRODUK</th><th>JUMLAH</th><th>HARGA</th><th>TOTAL</th></tr>
+      <tr><td>Jaket</td><td>2</td><td>RP60.000</td><td>RP120.000</td></tr>
+      <tr><td>Kaos</td><td>5</td><td>RP30.000</td><td>RP150.000</td></tr>
+      <tr><td>Kemeja</td><td>3</td><td>RP50.000</td><td>RP150.000</td></tr>
+      <tr><td>Celana</td><td>1</td><td>RP75.000</td><td>RP75.000</td></tr>
+    </table>
+    <div class="totals">
+      <p>Sub Total: RP495.000</p>
+      <p>Pajak: RP95.000</p>
+      <h3>TOTAL: RP590.000</h3>
+    </div>
+    <p>Pembayaran:<br>Nama: Borcelle<br>No Rekening: 1234567</p>
+    <a href="#" class="download-btn" onclick="window.print()">Download</a>
+  </div>
+  <div class="footer">BORCELLE - 123 Anywhere St., Any City | hello@reallygreatsite.com</div>
+</body>
+</html>
